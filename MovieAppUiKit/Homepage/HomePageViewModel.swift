@@ -5,22 +5,23 @@
 //  Created by Diana Pava Avila on 14/01/25.
 //
 
-class HomePageViewModel {
+class HomePageViewModel: BaseViewModel {
     
-    var movies: [Movie] = []
+   private var movies: [Movie] = []
     
     private lazy var respository : MovieRepository = {
         let apiClient = ApiClient()
         return MovieRepository(apiClient: apiClient)
     }()
     
-    func viewdidload() {
+    override func viewdidload() {
+        super.viewdidload()
         getMovies()
     }
     
-    func getMovies() {
-        respository.getMovie { movie in
-            self.movies = movie
+    private func getMovies() {
+        respository.getMovie { [weak self] movie in
+            self?.movies = movie
         } onFailure: { error in
             print(error)
         }
