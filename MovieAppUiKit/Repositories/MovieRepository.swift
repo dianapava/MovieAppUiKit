@@ -5,9 +5,13 @@
 //  Created by Diana Pava Avila on 13/01/25.
 //
 
-class MovieRepository {
+protocol MovieRepositoryProtocol {
+    func getMovie(onSuccess:  @escaping ([Movie]) -> (), onFailure:  @escaping (Error) -> ())
+}
+
+class MovieRepository: MovieRepositoryProtocol {
     
-    let apiClient: ApiClientProtocol
+    private let apiClient: ApiClientProtocol
     
     init(apiClient: ApiClientProtocol) {
         self.apiClient = apiClient
@@ -15,9 +19,8 @@ class MovieRepository {
     
     func getMovie(onSuccess:  @escaping ([Movie]) -> (), onFailure:  @escaping (Error) -> ()) {
         let endpoint = MovieEndpoint()
-        apiClient.request(endpoint: endpoint) { (model: MovieModel) in
-            onSuccess(model.results)
-            print(model.results)
+        apiClient.request(endpoint: endpoint) { [weak self] (model: MovieModel) in
+           onSuccess(model.results)
         } onFailure: { error in
             onFailure(error)
         }

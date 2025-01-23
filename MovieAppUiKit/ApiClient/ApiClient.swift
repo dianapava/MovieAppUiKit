@@ -19,17 +19,19 @@ protocol ApiClientProtocol {
 
 class ApiClient: ApiClientProtocol {
     
+    private let request: URLRequestFactoryProtocol
+    
+    init(request: URLRequestFactoryProtocol = URLRequestFactory()) {
+        self.request = request
+    }
+    
     func request<T: Codable>(endpoint: any Endpoint, onSuccess: @escaping (T) -> (), onFailure: @escaping (any Error) -> ()){
         guard let url = URL(string: endpoint.url) else {
             onFailure(ClientError.urlInvalid)
             return
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = endpoint.httpMethod.rawValue
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = endpoint.headers
-        
+        let request = self.request.createRequest(endpoint: endpoint)
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 onFailure(error)
