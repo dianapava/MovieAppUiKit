@@ -5,23 +5,27 @@
 //  Created by Diana Pava Avila on 14/01/25.
 //
 
-class HomePageViewModel: BaseViewModel {
+protocol HomePageViewModelProtocol: ViewModelProtocol {
+    var showMovies: ([Movie]) -> () { get set }
+}
+
+final class HomePageViewModel: BaseViewModel, HomePageViewModelProtocol {
+    var showMovies: ([Movie]) -> () = { _ in }
     
-   private var movies: [Movie] = []
-    
-    private lazy var respository : MovieRepository = {
-        let apiClient = ApiClient()
-        return MovieRepository(apiClient: apiClient)
-    }()
-    
-    override func viewdidload() {
-        super.viewdidload()
+    private var movies: [Movie] = []
+    private let repository: MovieRepositoryProtocol
+    init(respository: MovieRepositoryProtocol) {
+        self.repository = respository
+    }
+
+    override func viewDidLoad() {
         getMovies()
     }
     
     private func getMovies() {
-        respository.getMovie { [weak self] movie in
-            self?.movies = movie
+        repository.getMovie { [weak self] movies in
+            self?.movies = movies
+            self?.showMovies(movies)
         } onFailure: { error in
             print(error)
         }

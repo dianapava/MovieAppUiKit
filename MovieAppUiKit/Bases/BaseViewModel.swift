@@ -6,8 +6,11 @@
 //
 import Foundation
 
-class BaseViewModel {
-    
-    func viewdidload() {}
+protocol ViewModelProtocol: AnyObject {
+    func viewDidLoad()
+}
+
+class BaseViewModel : ViewModelProtocol {
+    func viewDidLoad() {}
 }
  

@@ -6,16 +6,24 @@
 //
 import UIKit
 
-class BaseViewController: UIViewController {
+class BaseViewController<ViewModel: ViewModelProtocol>: UIViewController {
  
-    private var viewModel = BaseViewModel()
+    var viewModel: ViewModel
     
-    init(viewModel: BaseViewModel = BaseViewModel()) {
-        super.init(nibName: nil, bundle: nil)
+    init(viewModel: ViewModel) {
         self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setObservers()
+        viewModel.viewDidLoad()
+    }
+    
+    func setObservers() {}
 }

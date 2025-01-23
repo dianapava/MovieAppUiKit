@@ -7,15 +7,16 @@
 
 import UIKit
 
-class HomePageViewController: BaseViewController {
+final class HomePageViewController<ViewModel: HomePageViewModelProtocol>: BaseViewController<ViewModel> {
     
-    let viewModel = HomePageViewModel()
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.viewdidload()
     }
-
-
+    
+    override func setObservers() {
+        viewModel.showMovies = { movies in
+            
+        }
+    }
 }
 
