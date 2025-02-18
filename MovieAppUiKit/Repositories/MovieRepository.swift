@@ -7,6 +7,7 @@
 
 protocol MovieRepositoryProtocol {
     func getMovie(onSuccess:  @escaping ([Movie]) -> (), onFailure:  @escaping (Error) -> ())
+    func getGenreMovie(onSuccess:  @escaping ([GenreId]) -> (), onFailure:  @escaping (Error) -> ())
 }
 
 class MovieRepository: MovieRepositoryProtocol {
@@ -21,6 +22,15 @@ class MovieRepository: MovieRepositoryProtocol {
         let endpoint = MovieEndpoint()
         apiClient.request(endpoint: endpoint) { [weak self] (model: MovieModel) in
            onSuccess(model.results)
+        } onFailure: { error in
+            onFailure(error)
+        }
+    }
+    
+    func getGenreMovie(onSuccess:  @escaping ([GenreId]) -> (), onFailure:  @escaping (Error) -> ()) {
+        let endpoint = GenreEndpoint()
+        apiClient.request(endpoint: endpoint) { (genre: GenresMovie) in
+            onSuccess(genre.genres)
         } onFailure: { error in
             onFailure(error)
         }
