@@ -7,12 +7,14 @@
 import Foundation
 
 protocol URLRequestFactoryProtocol {
-    func createRequest(endpoint: Endpoint) -> URLRequest
+    func createRequest(endpoint: Endpoint) throws -> URLRequest
 }
 
 struct URLRequestFactory: URLRequestFactoryProtocol {
-    func createRequest(endpoint: Endpoint) -> URLRequest {
-        let url = URL(string: endpoint.url)!
+    func createRequest(endpoint: Endpoint) throws -> URLRequest {
+        guard let url = URL(string: endpoint.url) else {
+            throw ClientError.urlInvalid
+        }
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.httpMethod.rawValue
         request.timeoutInterval = 10

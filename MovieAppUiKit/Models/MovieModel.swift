@@ -20,8 +20,4 @@ struct Movie: Codable, Identifiable {
     let genre_ids: [Int]
     let vote_count: Int
     
-    
-    var posterURL: URL? {
-        URL(string: "https://image.tmdb.org/t/p/w500\(poster_path)")
-    }
 }

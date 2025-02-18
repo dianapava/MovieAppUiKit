@@ -1,13 +1,13 @@
 //
-//  MovieEndpoint.swift
+//  GenreEndpoint.swift
 //  MovieAppUiKit
 //
-//  Created by Diana Pava Avila on 13/01/25.
+//  Created by Diana Pava Avila on 29/01/25.
 //
 import Foundation
 
-struct MovieEndpoint: Endpoint {
-    var url = "https://api.themoviedb.org/3/movie/popular"
+struct GenreEndpoint: Endpoint {
+    var url: String = "https://api.themoviedb.org/3/genre/movie/list"
     var httpMethod: HTTPMethod = .get
     var headers: [String : String] =  [
         "accept": "application/json",
